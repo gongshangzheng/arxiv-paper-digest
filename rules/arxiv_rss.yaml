@@ -28,26 +28,46 @@ custom_config:
       date_only: false
       description: "时间过滤：爬取24小时内的论文"
     
-    # 关键词过滤器：保留 diffusion、autoregressive、image compression 相关
-    - type: "or"
-      description: "关键词过滤：保留标题或摘要中包含 diffusion、autoregressive 或 image compression 的论文"
+    # 关键词过滤器：保留 diffusion、autoregressive、image compression 相关，排除 weather
+    - type: "and"
+      description: "关键词过滤：保留 diffusion、autoregressive 或 image compression 相关论文，排除 weather 相关"
       filters:
-        - type: "title"
-          keywords:
-            - "diffusion"
-            - "autoregressive"
-            - "AR model"
-            - "autoregression"
-            - "image compression"
-            - "image rescaling"
-        - type: "summary"
-          keywords:
-            - "diffusion"
-            - "autoregressive"
-            - "AR model"
-            - "autoregression"
-            - "image compression"
-            - "image rescaling"
+        - type: "or"
+          filters:
+            - type: "title"
+              keywords:
+                - "diffusion"
+                - "autoregressive"
+                - "AR model"
+                - "autoregression"
+                - "image compression"
+                - "image rescaling"
+            - type: "summary"
+              keywords:
+                - "diffusion"
+                - "autoregressive"
+                - "AR model"
+                - "autoregression"
+                - "image compression"
+                - "image rescaling"
+        - type: "not"
+          filter:
+            type: "or"
+            filters:
+              - type: "title"
+                keywords:
+                  - "weather"
+                  - "forecasting"
+                  - "meteorology"
+                  - "precipitation"
+                  - "rainfall"
+              - type: "summary"
+                keywords:
+                  - "weather"
+                  - "forecasting"
+                  - "meteorology"
+                  - "precipitation"
+                  - "rainfall"
   
   # 分类映射：diffusion、autoregressive、image_compression
   category_mapping:
