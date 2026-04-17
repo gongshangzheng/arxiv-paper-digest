@@ -19,12 +19,25 @@ scheduler:
   default_update_frequency: 120  # 默认更新频率（分钟），如果规则文件中未指定则使用此值
 
 # 全局过滤器配置（可选）
-# filters:
-#   - type: "title"        # 标题关键字过滤
-#     keywords: ["agent", "diffusion"]
-#     negate: false        # 是否反选
-#   - type: "summary"      # 摘要关键字过滤
-#     keywords: ["LLM"]
+filters:
+  - type: "title"        # 标题关键字过滤 - 排除 LLM 相关
+    keywords: ["LLM", "large language model", "GPT", "LLaMA", "Claude", "language model"]
+    negate: true         # 反选：排除包含这些关键词的条目
+  - type: "title"        # 标题关键字过滤 - 排除 Autonomous Driving 相关
+    keywords: ["autonomous driving", "self-driving", "autonomous vehicle", "autonomous navigation"]
+    negate: true         # 反选：排除包含这些关键词的条目
+  - type: "summary"      # 摘要关键字过滤 - 排除 LLM 相关
+    keywords: ["LLM", "large language model", "GPT", "LLaMA", "Claude", "language model"]
+    negate: true
+  - type: "summary"      # 摘要关键字过滤 - 排除 Autonomous Driving 相关
+    keywords: ["autonomous driving", "self-driving", "autonomous vehicle", "autonomous navigation"]
+    negate: true
+  - type: "title"        # 标题关键字过滤 - 排除 Robot 相关
+    keywords: ["robot", "robotics", "robotic", "humanoid", "manipulator", "mobile robot", "robot arm"]
+    negate: true         # 反选：排除包含这些关键词的条目
+  - type: "summary"      # 摘要关键字过滤 - 排除 Robot 相关
+    keywords: ["robot", "robotics", "robotic", "humanoid", "manipulator", "mobile robot", "robot arm"]
+    negate: true
 #   - type: "author"       # 作者关键字过滤
 #     keywords: ["Smith"]
 #     negate: true         # 反选：排除包含这些作者的条目
