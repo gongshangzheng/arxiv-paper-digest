@@ -5,7 +5,7 @@ name: "arxiv"
 url: "https://rss.arxiv.org/rss/cs.AI"  # 计算机科学-人工智能分类的 RSS
 crawl_type: "rss"
 update_frequency: 1440  # 更新频率（分钟），24小时
-storage_path: "arxiv"
+storage_path: "daily-papers"
 enabled: true
 
 # 自定义配置
@@ -117,15 +117,15 @@ custom_config:
   
   exporter:
     class: "ArXivOrgExporter"
-    title_template: "* [[{link}][{first_author} --- {title}]]"
+    title_template: "## [{first_author} --- {title}]({link})"
     
     path:
       type: "relative"
-      base_path: "~/org/roam/articles"
-      template: "{base_path}/{site_name}/{date}.org"
+      base_path: "~/blogs/content/daily-papers"
+      template: "{base_path}/{date}.md"
     
     index:
-      enabled: true
+      enabled: false
       path: null
       table_headers:
         - "{link}"

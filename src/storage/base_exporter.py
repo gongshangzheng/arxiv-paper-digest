@@ -287,7 +287,7 @@ class BaseOrgExporter(ABC):
     
     def _generate_markdown_content(self, result: CrawlResult, category: str | None = None, output_path: Path | None = None) -> str:
         """
-        生成 Markdown 内容
+        生成 Markdown 内容（Hugo 兼容 front matter）
         
         Args:
             result: 爬取结果
@@ -298,20 +298,36 @@ class BaseOrgExporter(ABC):
         """
         lines = []
         
-        # 文件头（YAML Front Matter）
+        # Hugo 兼容的 YAML Front Matter
         date_str = result.crawl_time.strftime('%Y-%m-%d')
-        title = f"{result.site_name.upper()} 爬取结果"
+        
+        # 生成分类显示名
+        category_display = ""
         if category:
-            title += f" - {category}"
-        title += f" - {date_str}"
+            category_map = {
+                "diffusion": "Diffusion",
+                "autoregressive": "Autoregressive",
+                "image_compression": "Image Compression",
+            }
+            category_display = category_map.get(category, category.title())
+        
+        title = f"每日论文 · {category_display} — {date_str}" if category_display else f"每日论文 — {date_str}"
+        
+        # tags 列表
+        tags = ["arxiv"]
+        if category:
+            tags.insert(0, category)
+        tags_str = ", ".join(f'"{t}"' for t in tags)
         
         lines.append("---")
-        lines.append(f"title: {title}")
+        lines.append(f'title: "{title}"')
         lines.append(f"date: {date_str}")
-        lines.append(f"author: Org Crawler")
-        if category:
-            lines.append(f"category: {category}")
-        lines.append(f"created: {result.crawl_time.strftime('%Y-%m-%d %H:%M:%S')}")
+        lines.append(f'categories: ["每日论文"]')
+        lines.append(f"tags: [{tags_str}]")
+        lines.append("draft: false")
+        lines.append(f'author: ["Org Crawler"]')
+        lines.append("mathjax: true")
+        lines.append("toc: true")
         lines.append("---")
         lines.append("")
         
