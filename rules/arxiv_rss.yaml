@@ -13,7 +13,9 @@ custom_config:
   max_items: 100
   crawl_time: "00:00"
   include_abstract: true
-  
+  auto_digest: true
+  digest_script: "~/.hanako/skills/arxiv-paper-digest/summarize_papers.sh"
+
   translator:
     enabled: true
     source_lang: "en"

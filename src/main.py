@@ -2,6 +2,7 @@
 
 import time
 import signal
+import subprocess
 from pathlib import Path
 from datetime import datetime, timedelta
 
@@ -402,6 +403,9 @@ def run_once(rule_files: list[str] | None = None):
         logger.error("rule_files 为空，没有可运行的规则文件")
         return
 
+    # 记录 auto_digest 配置（以第一个启用的规则为准）
+    auto_digest_script = None
+
     # 依次执行每个规则文件
     for rule_file in rule_files:
         try:
@@ -418,6 +422,19 @@ def run_once(rule_files: list[str] | None = None):
                 index_manager,
                 crawler,
             ) = setup_runtime(global_config, logger, rule_file)
+
+            # 记录 digest 配置
+            if auto_digest_script is None and _custom_config:
+                auto_digest = _custom_config.get('auto_digest', False)
+                if auto_digest:
+                    script = _custom_config.get('digest_script', '')
+                    if script:
+                        auto_digest_script = Path(script).expanduser()
+                    else:
+                        # 默认：从 org_crawler 目录向上查找 summarize_papers.sh
+                        default_script = Path(__file__).parent.parent.parent / 'summarize_papers.sh'
+                        if default_script.exists():
+                            auto_digest_script = default_script
 
             # 执行爬取
             run_crawl(
@@ -440,6 +457,35 @@ def run_once(rule_files: list[str] | None = None):
     logger.info("=" * 60)
     logger.info("单次运行完成")
     logger.info("=" * 60)
+
+    # 自动运行 digest（后处理）
+    if auto_digest_script and auto_digest_script.exists():
+        logger.info("=" * 60)
+        logger.info(f"触发自动 digest: {auto_digest_script}")
+        logger.info("=" * 60)
+        try:
+            result = subprocess.run(
+                ['bash', str(auto_digest_script)],
+                capture_output=True,
+                text=True,
+                timeout=600  # 10分钟超时
+            )
+            if result.returncode == 0:
+                logger.info("Digest 执行成功")
+                if result.stdout:
+                    for line in result.stdout.strip().split('\n'):
+                        logger.info(f"  [digest] {line}")
+            else:
+                logger.error(f"Digest 执行失败 (exit {result.returncode})")
+                if result.stderr:
+                    for line in result.stderr.strip().split('\n'):
+                        logger.error(f"  [digest-err] {line}")
+        except subprocess.TimeoutExpired:
+            logger.error("Digest 执行超时 (>600s)")
+        except Exception as e:
+            logger.error(f"Digest 执行异常: {e}", exc_info=True)
+    elif auto_digest_script:
+        logger.warning(f"Digest 脚本不存在: {auto_digest_script}")
 
 
 def run_continuous(rule_files: list[str] | None = None):
