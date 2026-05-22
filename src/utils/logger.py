@@ -26,7 +26,7 @@ def setup_logger(
     """
     global _logger
     
-    logger = logging.getLogger('org_crawler')
+    logger = logging.getLogger('arxiv_paper_digest')
     logger.setLevel(getattr(logging, level.upper()))
     
     # 清除现有的处理器
