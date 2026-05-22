@@ -74,7 +74,7 @@ from .example_crawler import ExampleRSSCrawler
 __all__ = [..., 'ExampleRSSCrawler']
 ```
 
-3. 在 `src/main.py` 的 `create_crawler()` 函数中添加：
+3. 在 `src/cli.py` 的 `create_crawler()` 函数中添加：
 
 ```python
 def create_crawler(site_config: SiteConfig) -> BaseCrawler:

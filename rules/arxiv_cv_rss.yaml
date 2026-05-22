@@ -1,15 +1,15 @@
 # ArXiv RSS 爬取规则配置
 # 用于爬取 diffusion / autoregressive / image compression / visual tokenizer 相关论文
 
-name: "arxiv"
-url: "https://rss.arxiv.org/rss/cs.AI"
+name: "arxiv-cv"
+url: "https://rss.arxiv.org/rss/cs.CV"
 crawl_type: "rss"
 update_frequency: 1440
 storage_path: "daily-papers"
 enabled: true
 
 custom_config:
-  max_items: 100
+  max_items: 150
   crawl_time: "00:00"
   include_abstract: true
   auto_digest: true

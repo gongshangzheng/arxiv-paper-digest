@@ -1,5 +1,5 @@
 [project]
-name = "org-crawler"
+name = "arxiv-paper-digest"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"

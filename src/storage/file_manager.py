@@ -19,6 +19,8 @@ class FileManager:
             base_path: 基础存储路径
             date_format: 日期格式
         """
+        # 展开 ~ 为用户主目录
+        base_path = os.path.expanduser(base_path)
         self.base_path = Path(base_path)
         self.date_format = date_format
         self.base_path.mkdir(parents=True, exist_ok=True)

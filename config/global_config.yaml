@@ -1,34 +1,19 @@
 storage:
-  base_path: "~/org/roam/articles"
+  base_path: "~/gongshangzheng.github.io/data/daily-papers"
   date_format: "%Y-%m-%d"
-  # 输出格式配置（支持多种方式）：
-  # - 单个格式：'org', 'markdown', 'json'
-  # - 组合格式：'both' (org+markdown), 'all' (org+markdown+json)
-  # - 列表格式：['org', 'markdown'], ['org', 'json'] 等
-  # - 逗号分隔：'org,markdown', 'org,json' 等
-  output_format: "both"  # 默认同时导出 org 和 markdown
-  
+  output_format: "html-blog"
 logging:
   level: "INFO"
   file: "logs/crawler.log"
   max_size_mb: 10
-  
 scheduler:
-  check_interval: 60  # 检查任务间隔（秒）
-  max_workers: 5      # 最大并发数
-  default_update_frequency: 120  # 默认更新频率（分钟），如果规则文件中未指定则使用此值
-
-# 全局过滤器配置（可选）
-# filters:
-#   - type: "title"        # 标题关键字过滤
-#     keywords: ["agent", "diffusion"]
-#     negate: false        # 是否反选
-#   - type: "summary"      # 摘要关键字过滤
-#     keywords: ["LLM"]
-#   - type: "author"       # 作者关键字过滤
-#     keywords: ["Smith"]
-#     negate: true         # 反选：排除包含这些作者的条目
-#   - type: "time_range"   # 时间范围过滤
-#     start: "2025-01-01"  # 或者使用 relative_days_start/relative_days_end / relative_hours_start/relative_hours_end
-#     end: "2025-01-31"
-
+  check_interval: 60
+  max_workers: 5
+  default_update_frequency: 120
+filters:
+  - type: "title"
+    keywords: ["LLM", "large language model", "GPT", "LLaMA", "Claude", "language model"]
+    negate: true
+  - type: "summary"
+    keywords: ["LLM", "large language model", "GPT", "LLaMA", "Claude", "language model"]
+    negate: true

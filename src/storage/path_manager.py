@@ -1,5 +1,6 @@
 """路径管理器"""
 
+import os
 from pathlib import Path
 from datetime import datetime
 from typing import Union
@@ -21,6 +22,9 @@ class PathManager:
             path_template: 路径模板，例如 "data/{site_name}/{date}.org"
                          如果为None，使用默认模板
         """
+        # 展开 ~ 为用户主目录
+        if isinstance(base_path, str):
+            base_path = os.path.expanduser(base_path)
         self.base_path = Path(base_path)
         self.path_type = path_type
         self.path_template = path_template or "data/{site_name}/{date}.org"
